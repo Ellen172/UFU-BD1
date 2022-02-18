@@ -7,4 +7,6 @@ alter table departamento
 	
 alter table departamento rename constraint departamento_gerente_cpf_fkey to gerente_fk; -- altera o nome da constraint
 
+alter table empregado drop sobrenome; -- deleta coluna
 
+alter table empregado add column sobrenome varchar(45) not null; -- adiciona nova coluna (com tipo e restrições)
