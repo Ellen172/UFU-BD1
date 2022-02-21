@@ -21,7 +21,7 @@ create table departamento (
 	numerodepto int not null, 
 	nome varchar (45) not null, 
 	gerentecpf char (14) not null, 
-	datainicio date, 
+	data_inicio timestamp default now(), -- tipo 'yyyy-mm-dd hh:mm:ss' 
 	-- definição de restrição 
 	constraint deptopk primary key (numerodepto),
 	constraint gerentefk foreign key (gerentecpf) references empregado (cpf) -- empregado precisará já estar cadastrado 
