@@ -114,3 +114,60 @@ select e.fname, e.lname, e.bdate
 	from employee e
 	order by e.bdate desc
 	limit 3;
+
+-- maior salario dos empregados 
+select sum(salary) "Soma", 
+		count(salary) "Nro", 
+		avg(salary) "Media"
+	from employee e;
+
+-- empregado mais velho 
+select e.fname "nome", e.bdate "nascimento"
+	from employee e
+	where bdate in ( 
+		select min (bdate)
+			from employee);
+		
+-- idade pelo nascimento do empregado mais velho
+select e.fname "nome", e.bdate "nascimento", 
+		(cast (now() as date) - bdate)/365 as "idade"
+	from employee e
+	where bdate in ( 
+		select min (bdate)
+			from employee);
+
+-- retorna apenas a data, sem hora
+select cast (now() as date); 
+
+-- retorna a qtd de elementos
+select count(*) from project p;
+
+-- retorna a qtd de diferentes elementos 
+select count ( distinct p.plocation) from project p;
+
+-- uso do agrupamento no parentesco dos dependentes
+select d.relationship, count (d.relationship)
+	from dependent d
+	group by d.relationship;
+	
+-- retorna as faixas salarias, qtd e soma em cada faixa 
+select e.salary , count (e.salary), sum (e.salary)
+	from employee e
+	group by e.salary
+	order by e.salary;
+	
+-- retorna as faixas salariais acima de 40000 
+select e.salary , count (e.salary), sum (e.salary)
+	from employee e
+	group by e.salary
+	having e.salary >40000
+	order by e.salary;
+	
+-- agrupa os elementos entre 30000 e 40000 
+	-- e retorna os grupos acima de 35000
+select e.salary , count (e.salary), sum (e.salary)
+	from employee e
+	where e.salary between 30000 and 40000
+	group by e.salary
+	having e.salary >35000
+	order by e.salary;
