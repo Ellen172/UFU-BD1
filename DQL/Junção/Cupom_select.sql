@@ -1,7 +1,5 @@
-/* TABELA CUPOM */ 
-
 -- produto cartesiano
-select * from cliente c, cupom_desconto cupom_desconto  
+select * from cliente c, cupom_desconto cd  
     where c.cod_cliente = cd.cod_cliente;
 
 -- join 
@@ -17,9 +15,8 @@ select cd.cod_cliente , count (*)
     from cupom_desconto cd
     group by cd.cod_cliente;
 
-
 -- retorna o nome dos cliente e a qtd de cupons de cada um
-select cd.cod_cliente "codigo", c.nome "nome", count (c.cod_cliente) "qtd de cupons"
+select c.cod_cliente "codigo", c.nome "nome", count (c.cod_cliente) "qtd de cupons"
     from cliente c natural join cupom_desconto cd
     group by c.cod_cliente
     order by c.cod_cliente;

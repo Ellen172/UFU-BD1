@@ -1,3 +1,5 @@
+create schema escola;
+
 create table orientador (
 	id int primary key, 
 	nome varchar(255)

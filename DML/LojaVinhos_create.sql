@@ -1,3 +1,5 @@
+-- create
+
 create schema lojaVinhos;
 
 create table regiao 
