@@ -16,6 +16,7 @@ select cd.cod_cliente , count (*)
     group by cd.cod_cliente;
 
 -- retorna o nome dos cliente e a qtd de cupons de cada um
+    -- natural join so pode ser usado se o nome dos ids for o mesmo para as duas tabelas
 select c.cod_cliente "codigo", c.nome "nome", count (c.cod_cliente) "qtd de cupons"
     from cliente c natural join cupom_desconto cd
     group by c.cod_cliente
