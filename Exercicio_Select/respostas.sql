@@ -122,16 +122,81 @@ select e.fname as "nome"
 
 /* 18. Listar para cada departamento seu número, a quantidade de empregados e a média 
 salarial de seus empregados. */
+select dno as "Departamento", count (dno) as "Qtd de empregados", avg(salary) as "Média Salarial"
+	from employee e 
+	group by dno;
 
 /* 19. Listar para cada projeto seu número, nome e a quantidade de empregados que 
 trabalham no projeto. */
+select pnumber as "Nro", pname as "Nome", count(pnumber) as "Qtd de empregados"
+	from project p join works_on wo
+		on p.pnumber = wo.pno
+	group by pnumber 
+	order by pnumber ;
 
 /* 20. Listar para cada projeto onde trabalham mais de dois empregados seu número e a 
 quantidade de empregados que trabalham no projeto */
+select p.pname as "projeto", p.pnumber as "numero" , count(p.pnumber) as "qtd de empregados"
+	from works_on wo join project p 
+		on wo.pno = p.pnumber 
+	group by p.pnumber, p.pname 
+	having count(p.pnumber)>2;
 
 /* 21. Listar para cada departamento que tem mais que 2 empregados, o número do 
 departamento e o número de empregados que ganham mais que 40000 */
-	
-	
 
+select e.dno as "departamento" , count(e.dno) as "qtd de empregados com salary>40000"
+	from employee e 
+	where salary > 40000
+	and e.dno in (
+		select dno 
+		from employee e 
+		group by dno
+		having count(dno)>2)
+	group by e.dno;
+	
+/* Consultas - SQL/DML – Consultas Aninhadas */
 
+/* 22. Listar todos os números de projetos que envolvam um empregado cujo último nome é 
+’Smith’ sendo que o empregado deve ser trabalhador ou gerente do departamento que 
+controla o projeto. */
+(select p.pnumber --projetos que gerencia
+	from department d , project p 
+	where d.dnumber = p.dnum 
+	and d.mgrssn in (
+		select e.ssn 
+			from employee e 
+			where e.lname = 'Smith')
+) union ( -- projetos onde trabalha
+	select wo.pno
+		from employee e, works_on wo 
+		where e.ssn = wo.essn 
+		and e.lname = 'Smith'
+);
+
+/* 23. Reformulando a consulta, removendo a cláusula UNION e incluindo a cláusula IN */
+select distinct p.pnumber
+	from project p
+	where p.pnumber in (
+		select p.pnumber 
+			from department d , project p 
+			where d.dnumber = p.dnum 
+			and d.mgrssn 
+				in (select e.ssn 
+						from employee e 
+						where e.lname = 'Smith'))
+	or p.pnumber in (
+		select wo.pno
+			from employee e, works_on wo 
+			where e.ssn = wo.essn 
+			and e.lname = 'Smith')
+
+/* 24. Listar o nome dos empregados com dependente(s) de mesmo ’first name’ e sexo que 
+o empregado – usando sub-consulta */
+SELECT e.fname,e.lname
+	FROM employee as e
+	WHERE e.ssn IN(
+		SELECT essn
+		FROM dependent as d
+		WHERE fname=dependent_name
+		AND e.sex=d.sex);
